@@ -1,0 +1,44 @@
+name: FlyPlusPassenger
+options:
+  bundleIdPrefix: com.flyplus
+  deploymentTarget:
+    iOS: "26.0"
+  createIntermediateGroups: true
+  groupSortPosition: top
+
+settings:
+  base:
+    MARKETING_VERSION: "1.0"
+    CURRENT_PROJECT_VERSION: "1"
+    SWIFT_VERSION: "6.0"
+    CODE_SIGN_STYLE: Automatic
+    CODE_SIGNING_REQUIRED: NO
+    CODE_SIGNING_ALLOWED: NO
+    GENERATE_INFOPLIST_FILE: YES
+    SWIFT_EMIT_LOC_STRINGS: YES
+
+targets:
+  FlyPlusPassenger:
+    type: application
+    platform: iOS
+    sources:
+      - path: Sources
+    info:
+      path: Sources/Info.plist
+      properties:
+        CFBundleDisplayName: Passenger
+        UILaunchScreen: {}
+        UIUserInterfaceStyle: Light
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+        UIAppFonts:
+          - InstrumentSans-Variable.ttf
+          - InstrumentSans-Italic-Variable.ttf
+        NSCameraUsageDescription: "Live View uses the camera to show walking directions in the terminal ahead of you."
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.flyplus.passenger
+        PRODUCT_NAME: Passenger
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
+        TARGETED_DEVICE_FAMILY: "1"
