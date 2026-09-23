@@ -61,7 +61,7 @@ struct JourneySetupView: View {
                 .multilineTextAlignment(.center)
                 .lineSpacing(-4)
 
-            Text("From check-in to your gate, get help at every step. Add your flight, or just ask me something.")
+            Text("From check-in to your gate, get help at every step.")
                 .font(Type.font(16))
                 .foregroundStyle(tenant.palette.inkMuted)
                 .multilineTextAlignment(.center)
