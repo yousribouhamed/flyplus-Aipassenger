@@ -167,8 +167,9 @@ struct JourneySetupView: View {
 
     private var footer: some View {
         VStack(spacing: 12) {
+            // No icon: a magnifying glass next to "Find my flight" repeats the
+            // verb in pictures and gives the eye a second thing to land on.
             PrimaryButton(title: tr("Find my flight", "ابحث عن رحلتي"),
-                          symbol: "magnifyingglass",
                           isEnabled: !flightNumber.isEmpty,
                           action: findFlight)
 

@@ -118,9 +118,14 @@ struct DeadlineChip: View {
 /// passenger glancing at their phone while walking should not be able to spend
 /// SAR 250 by tapping a generic word.
 ///
-/// This is the stock `.borderedProminent` button at `.large` control size; the
-/// wrapper exists only so the tint and the minimum height are applied in one
-/// place, not to replace the platform control.
+/// One flat fill, one radius, one height, and nothing else: no gradient, no
+/// shadow, no border. The label is the only thing on it to read, which is the
+/// point — everything else on the button is chrome competing with the verb.
+///
+/// Disabled is a quiet tint rather than the platform's grey slab. "Not yet"
+/// and "broken" should not look the same to someone waiting to type a flight
+/// number, and the height never changes between the two states, so the layout
+/// does not shift as the form becomes valid.
 struct PrimaryButton: View {
     let title: String
     var symbol: String?
@@ -131,13 +136,9 @@ struct PrimaryButton: View {
     var body: some View {
         Button(role: role, action: action) {
             label
-                .frame(maxWidth: .infinity)
-                .frame(minHeight: 28)
         }
-        .buttonStyle(.borderedProminent)
-        .buttonBorderShape(.roundedRectangle(radius: 16))
-        .controlSize(.large)
-        .tint(role == .destructive ? Theme.changed : Theme.brand)
+        .buttonStyle(PrimaryButtonStyle(tint: role == .destructive ? Theme.changed : Theme.brand,
+                                        isEnabled: isEnabled))
         .disabled(!isEnabled)
     }
 
@@ -145,12 +146,33 @@ struct PrimaryButton: View {
     private var label: some View {
         if let symbol {
             Label(title, systemImage: symbol)
-                .font(Theme.font(.headline, weight: .bold))
         } else {
             Text(title)
-                .font(Theme.font(.headline, weight: .bold))
-                .multilineTextAlignment(.center)
         }
+    }
+}
+
+private struct PrimaryButtonStyle: ButtonStyle {
+    let tint: Color
+    let isEnabled: Bool
+
+    private let shape = RoundedRectangle(cornerRadius: 16, style: .continuous)
+
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .font(Theme.font(.headline, weight: .semibold))
+            .multilineTextAlignment(.center)
+            .foregroundStyle(isEnabled ? Color.white : Theme.ink2)
+            .padding(.horizontal, 20)
+            .padding(.vertical, 14)
+            // The height is a floor rather than a fixed frame, so a long label
+            // or a large Dynamic Type setting grows the button instead of
+            // clipping the word the passenger needs.
+            .frame(maxWidth: .infinity, minHeight: Theme.buttonHeight)
+            .background(isEnabled ? tint : Theme.surface2, in: shape)
+            .contentShape(shape)
+            .opacity(configuration.isPressed ? 0.85 : 1)
+            .animation(.easeOut(duration: 0.12), value: configuration.isPressed)
     }
 }
 
