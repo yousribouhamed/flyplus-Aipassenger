@@ -34,7 +34,6 @@ struct JourneySetupView: View {
                     greeting
                     entryCard
                     BoardingPassScanCard { flightNumber = "SV117" }
-                    chips
                     Color.clear.frame(height: 8)
                 }
                 .padding(.horizontal, Metric.gutter)
@@ -102,18 +101,6 @@ struct JourneySetupView: View {
                 PrimaryButton(title: working ? "Finding your flight\u{2026}" : "Continue",
                               enabled: canContinue && !working) { start() }
                     .padding(.top, 2)
-            }
-        }
-    }
-
-    private var chips: some View {
-        FlowChips(prompts: ["I'm not flying today",
-                            "What can you do?",
-                            "Where can I park?"]) { prompt in
-            if prompt == "I'm not flying today" {
-                store.startVisit()
-            } else {
-                ask(prompt)
             }
         }
     }
