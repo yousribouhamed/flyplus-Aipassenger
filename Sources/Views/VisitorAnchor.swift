@@ -15,8 +15,6 @@ struct VisitorAnchor: View {
     @Environment(\.tenant) private var tenant
     @Environment(JourneyStore.self) private var store
 
-    @State private var meetSheet = false
-
     var body: some View {
         VStack(spacing: 18) {
             if tenant.has(.voice) {
@@ -39,26 +37,17 @@ struct VisitorAnchor: View {
         }
         .frame(maxWidth: .infinity)
         .padding(.top, 8)
-        .sheet(isPresented: $meetSheet) {
-            MeetArrivalSheet()
-                .environment(store)
-                .environment(\.tenant, tenant)
-                .presentationDetents([.height(440)])
-        }
     }
 
-    // MARK: The four things visitors actually come to do
+    // MARK: The things visitors actually come to do
 
     private var intents: some View {
         VStack(spacing: 10) {
             HStack(spacing: 10) {
-                intent("Meet someone", "figure.walk.arrival", prominent: true) { meetSheet = true }
                 intent("Parking", "parkingsign") { go(.parking) }
-            }
-            HStack(spacing: 10) {
                 intent("Eat & shop", "cup.and.saucer") { go(.food) }
-                intent("Airport help", "questionmark.circle") { go(.help) }
             }
+            intent("Airport help", "questionmark.circle") { go(.help) }
         }
     }
 
@@ -100,6 +89,10 @@ struct VisitorAnchor: View {
 // The one visitor intent that re-anchors the whole app: give it a flight and the
 // countdown, destination and status all come back. The useful number is not the
 // landing time — it's when they actually walk out.
+//
+// Currently unpresented: the "Meet someone" intent that opened it was removed
+// from the visitor anchor, and nothing else calls `startMeeting`. Meeting mode
+// still works once entered — it just has no way in from the UI.
 
 struct MeetArrivalSheet: View {
     @Environment(\.tenant) private var tenant
